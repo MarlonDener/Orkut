@@ -1,9 +1,22 @@
 import { Box } from "../Box"
-  const gitHubUser = 'MarlonDener'
+import { AlurakutProfileSidebarMenuDefault } from "../../lib/utils";
+
+const gitHubUser = 'MarlonDener'
+
 function ProfileSidebar(){
   return(
     <Box>
          <img src={`https://github.com/${gitHubUser}.png`} style={{ borderRadius: '8px'}}/>
+         <hr />
+
+      <p>
+         <a className="boxLink" href={`https://github.com/${gitHubUser}`}>
+           @{gitHubUser}
+         </a>
+      </p>
+      
+       <hr/>
+      <AlurakutProfileSidebarMenuDefault />
     </Box>
   )
 }
