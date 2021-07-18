@@ -13,18 +13,42 @@ export default function Home() {
 
   const favoritPeople = ['juunegreiros', 'rafaballerini', 'Marcoantonio9', 'larissa', 'marcos', 'rafaelmaiach']
   const [seguidores, setSeguidores] = useState([]);
+  const [Communities, setCommunities] = useState([]);
 
   useEffect(() => {
     fetch('https://api.github.com/users/MarlonDener/following')
       .then(function (response) {
         return response.json();
       }).then(function (completedResponse) {
-        console.log(completedResponse);
         setSeguidores(completedResponse);
       })
+
+    // API GraphQL
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        'Authorization': '0e8d3fd6706d98e0df57750f2ee7da',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        "query": `
+            query {
+              allCommunities {
+                id,
+                title
+                image
+                creatorSlug
+              }      
+        }`
+      })
+    }).then((response) => response.json()).then((completed) => {
+      const communitiesOfDato = completed.data.allCommunities;
+      console.log(completed)
+      setCommunities(communitiesOfDato)
+    })
   }, [])
 
-  const [Communities, setCommunities] = useState([]);
 
 
   const handleCreateCommunity = (e) => {
@@ -42,9 +66,7 @@ export default function Home() {
   }
 
 
-
   // Get array in the github
-
 
   return (
     <>
@@ -96,7 +118,7 @@ export default function Home() {
               {Communities.map((community, index) => {
                 return (
                   <li key={community.id}>
-                    <a href={`/users/${community}`}>
+                    <a href={`/comunidades/${community.id}`}>
                       <img src={community.image} />
                       <span>{community.title}</span>
                     </a>
