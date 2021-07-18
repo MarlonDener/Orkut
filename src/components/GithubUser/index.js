@@ -5,7 +5,7 @@ const gitHubUser = 'MarlonDener'
 
 function ProfileSidebar(){
   return(
-    <Box>
+    <Box as="aside">
          <img src={`https://github.com/${gitHubUser}.png`} style={{ borderRadius: '8px'}}/>
          <hr />
 
