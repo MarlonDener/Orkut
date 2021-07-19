@@ -11,6 +11,7 @@ import ProfileRelationsBox from '../src/components/ProfileRelationsBox';
 
 export default function Home() {
 
+  const UserRandom = 'Marlon Dener';
   const favoritPeople = ['juunegreiros', 'rafaballerini', 'Marcoantonio9', 'larissa', 'marcos', 'rafaelmaiach']
   const [seguidores, setSeguidores] = useState([]);
   const [Communities, setCommunities] = useState([]);
@@ -56,13 +57,26 @@ export default function Home() {
     const dadosDoForm = new FormData(e.target);
 
     const comunidade = {
-      id: new Date().toISOString(),
       title: dadosDoForm.get('title'),
       image: dadosDoForm.get('image'),
+      creatorSlug: UserRandom
+
     }
 
-    const updateCommunities = [...Communities, comunidade];
-    setCommunities(updateCommunities)
+    fetch('api/communities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(comunidade)
+    }).then(async (response) => {
+      const dados = await response.json();
+      console.log(dados.registroCriado);
+      const comunidade = dados.registroCriado
+      const updateCommunities = [...Communities, comunidade];
+      setCommunities(updateCommunities)
+    })
+
   }
 
 
@@ -117,8 +131,8 @@ export default function Home() {
             <ul>
               {Communities.map((community, index) => {
                 return (
-                  <li key={community.id}>
-                    <a href={`/comunidades/${community.id}`}>
+                  <li key={index}>
+                    <a href={`/comunidades/${community.title}`}>
                       <img src={community.image} />
                       <span>{community.title}</span>
                     </a>
